@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!--
+    Main HTML template for the portfolio home page.
+    - Uses semantic HTML5 elements (nav, header, main, section, footer).
+    - Loads a modern, clean font (Google Fonts Roboto) and links to the stylesheet and main JS file.
+    - This file is intended to be served by Flask so url_for is used to reference static assets.
+  -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jiya Khurana — Portfolio</title>
+
+  <!-- Load Roboto from Google Fonts for a clean, professional look -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Link to the project's main stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <!--
+    The overall layout uses a fixed left sidebar and a main content area.
+    On mobile the sidebar becomes a collapsible top navigation to keep everything accessible.
+  -->
+
+  <!-- Fixed left sidebar navigation -->
+  <aside class="sidebar" id="sidebar">
+    <!-- Branding / small header inside sidebar -->
+    <div class="sidebar-brand">
+      <h1>Jiya Khurana</h1>
+      <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle navigation">☰</button>
+    </div>
+
+    <!-- The nav contains anchor links to each section of the page -->
+    <nav class="sidebar-nav" aria-label="Primary">
+      <ul>
+        <li><a href="#about" class="nav-link">About Me</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#certifications" class="nav-link">Certifications</a></li>
+        <li><a href="#experience" class="nav-link">Experience</a></li>
+        <li><a href="#my-tech-ecosystem" class="nav-link">My Tech Ecosystem</a></li>
+      </ul>
+
+      <!-- Contact links sit below the main navigation links -->
+      <div class="sidebar-contacts">
+        <h3>Contact Me</h3>
+        <ul>
+          <li><a href="https://github.com/JiyaKhurana2102" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/jiyakhurana21/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:jiyakhurana2102@gmail.com">Email</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- A small footer note inside sidebar -->
+    <div class="sidebar-footer">© Jiya Khurana</div>
+  </aside>
+
+  <!-- Main content area: header + sections -->
+  <main class="content">
+
+    <!-- Header for the main content (keeps semantic structure clear) -->
+    <header class="content-header">
+      <!-- This heading can remain visible as a page title on small screens -->
+      <h2 class="sr-only">Portfolio content</h2>
+    </header>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section about-section">
+      <!-- Use a flexible container to place headshot and text side-by-side on wide screens -->
+      <div class="about-grid">
+        <!-- Headshot card: rounded rectangle with an outline stroke in accent color (#fcf3ff) -->
+        <figure class="headshot-card">
+          <!-- The image is stored in static/images/..., served via url_for -->
+          <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Prof-Headshot.jpg') }}" alt="Jiya Khurana headshot">
+        </figure>
+
+        <!-- About content: heading + description in an accent-colored rounded box -->
+        <div class="about-content">
+          <h3>About Me</h3>
+
+          <!-- Description box with background accent (#fcf3ff) and rounded corners -->
+          <div class="about-description">
+            <p>
+              Hi! I’m a freshman Computer Science student at the University of Texas at Dallas and a beginner coder. This portfolio showcases my projects, certifications, and an easy way to get in touch as I continue building my skills through hands-on learning and personal projects.
+            </p>
+            <p>
+              Outside of tech, I moved to the U.S. from India during my sophomore year of high school. I love reading (I can finish a book a day), dancing, playing D&D, iced coffee, wintertime, and the holidays. Someday, I hope to have a cozy library of my own and a cat to keep me company.
+            </p>
+          </div>
+
+          <!-- CAROUSEL: A horizontally moving set of images that auto-scrolls -->
+          <!-- The images are provided to the page and then rendered by JavaScript into the carousel track -->
+          <div class="carousel-wrap" aria-hidden="false">
+            <div class="carousel" id="carousel">
+              <!-- JS will populate the inner track with images for an infinite scrolling effect -->
+              <div class="carousel-track" id="carouselTrack" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <!--
+            TECH SECTION
+            - Placed inside the About Me area under the carousel as requested.
+            - Uses semantic headings and a responsive flexible grid of pill-style buttons.
+            - Each "button" is keyboard-accessible and has hover/focus styles (see CSS).
+            - This is a presentational area for technologies you use often; later these can link to tag pages or filters.
+          -->
+          <section class="tech-section" aria-labelledby="tech-title">
+            <!-- Heading must be descriptive and referenced by aria-labelledby for accessibility -->
+            <h4 id="tech-title">Tech I use often</h4>
+
+            <!-- Use role="list"/"listitem" to make the group of buttons understandable to assistive tech -->
+            <div class="tech-grid" role="list">
+              <!-- Buttons are interactive elements; use native <button> for keyboard/mouse support -->
+              <button class="tech-btn" role="listitem" aria-pressed="false">Python</button>
+              <button class="tech-btn" role="listitem" aria-pressed="false">React Native</button>
+              <button class="tech-btn" role="listitem" aria-pressed="false">JavaScript</button>
+              <button class="tech-btn" role="listitem" aria-pressed="false">CSS</button>
+              <button class="tech-btn" role="listitem" aria-pressed="false">Streamlit</button>
+              <button class="tech-btn" role="listitem" aria-pressed="false">Flask</button>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS SECTION (placeholder) -->
+    <section id="projects" class="section">
+      <header>
+        <h3>Projects</h3>
+      </header>
+
+      <!-- project placard grid: responsive cards that adapt to width -->
+      <div class="placeholder-grid project-grid">
+
+        <!-- Pulse — Campus Guide App -->
+        <article class="project-card" aria-labelledby="proj-pulse">
+          <div class="project-card-inner">
+            <div class="project-thumb">
+              <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Pulse-1.png') }}" alt="Pulse screenshot 1">
+            </div>
+            <div class="project-meta">
+              <h4 id="proj-pulse" class="project-title">Pulse — Campus Guide App</h4>
+              <div class="project-dates">Aug 2025 – Dec 2025</div>
+              <p class="project-desc">Pulse is a cross-platform campus guide app that centralizes events, resources, and student engagement tools. I developed frontend and backend using React Native and Expo, integrated Firebase Firestore for real-time data, and built a custom chatbot backed by an API for campus Q&amp;A.</p>
+              <div class="project-thumbs">
+                <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Pulse-1.png') }}" alt="Pulse thumb 1">
+                <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Pulse-2.png') }}" alt="Pulse thumb 2">
+              </div>
+              <div class="project-links">
+                <a class="btn" href="https://github.com/JiyaKhurana2102/Pulse" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Plannery — Planner App -->
+        <article class="project-card" aria-labelledby="proj-plannery">
+          <div class="project-card-inner">
+            <div class="project-thumb">
+              <!-- add class 'crop-top' so CSS can crop this image from the top -->
+              <img class="crop-top" src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Plannery-1.png') }}" alt="Plannery screenshot 1">
+            </div>
+            <div class="project-meta">
+              <h4 id="proj-plannery" class="project-title">Plannery — Planner App</h4>
+              <div class="project-dates">Aug 2025 – Nov 2025</div>
+              <p class="project-desc">Plannery streamlines personal scheduling. I designed UI/UX in Figma, implemented a mobile login screen with React Native, and built authentication routes with Node.js and Express to connect frontend and backend systems.</p>
+              <div class="project-thumbs">
+                <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Plannery-1.png') }}" alt="Plannery thumb 1">
+                <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Plannery-2.png') }}" alt="Plannery thumb 2">
+              </div>
+              <div class="project-links">
+                <a class="btn" href="https://github.com/JiyaKhurana2102/plannery_app_2025" target="_blank" rel="noopener">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lacey — Organizational App -->
+        <article class="project-card" aria-labelledby="proj-lacey">
+          <div class="project-card-inner">
+            <div class="project-thumb">
+              <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Lacey-1.png') }}" alt="Lacey screenshot 1">
+            </div>
+            <div class="project-meta">
+              <h4 id="proj-lacey" class="project-title">Lacey — Organizational App</h4>
+              <div class="project-dates">Apr 2025 – May 2025</div>
+              <p class="project-desc">Lacey is a concept productivity app focused on organizing tasks and routines. I led UI/UX design in Figma and produced high-fidelity prototypes emphasizing accessibility and clear user flows.</p>
+              <div class="project-thumbs">
+                <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Lacey-1.png') }}" alt="Lacey thumb 1">
+                <img src="{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Lacey-2.png') }}" alt="Lacey thumb 2">
+              </div>
+              <!-- Details button removed as requested -->
+              <div class="project-links"></div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS SECTION -->
+    <section id="certifications" class="section">
+      <header>
+        <h3>Certifications</h3>
+      </header>
+
+      <!-- certificates grid: styled like project placards to match visual language -->
+      <div class="placeholder-grid cert-grid">
+        <!-- 1 -->
+        <article class="cert-card" aria-labelledby="cert-1">
+          <div class="cert-inner">
+            <h4 id="cert-1">Introduction to Mobile App Development</h4>
+            <div class="cert-org">IBM</div>
+            <div class="cert-dates">Issued Dec 2025</div>
+            <div class="cert-id">Credential ID KC4BX6QUCLXN</div>
+          </div>
+        </article>
+
+        <!-- 2 -->
+        <article class="cert-card" aria-labelledby="cert-2">
+          <div class="cert-inner">
+            <h4 id="cert-2">Data Analysis and Visualization with Python</h4>
+            <div class="cert-org">Microsoft</div>
+            <div class="cert-dates">Issued Oct 2025</div>
+            <div class="cert-id">Credential ID UMXMZ3MTS6YA</div>
+          </div>
+        </article>
+
+        <!-- 3 -->
+        <article class="cert-card" aria-labelledby="cert-3">
+          <div class="cert-inner">
+            <h4 id="cert-3">Python Programming Fundamentals</h4>
+            <div class="cert-org">Microsoft</div>
+            <div class="cert-dates">Issued Sep 2025</div>
+            <div class="cert-id">Credential ID NZPAJOGMITZB</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE SECTION (placeholder) -->
+    <section id="experience" class="section">
+      <header>
+        <h3>Experience</h3>
+        <p class="muted">(Work / volunteer / internships will go here)</p>
+      </header>
+      <div class="placeholder-list">
+        <div class="exp-item">Experience item 1</div>
+        <div class="exp-item">Experience item 2</div>
+      </div>
+    </section>
+
+    <!-- MY TECH ECOSYSTEM SECTION (placeholder) -->
+    <section id="my-tech-ecosystem" class="section">
+      <header>
+        <h3>My Tech Ecosystem</h3>
+        <p class="muted">(Links, resources, notes — whatever you want this hub to contain)</p>
+      </header>
+      <div class="placeholder-grid">
+        <div class="nexus-card">Nexus content placeholder</div>
+      </div>
+    </section>
+
+    <!-- GALLERY SECTION (placeholder) -->
+    <section id="gallery" class="section gallery-section">
+      <header>
+        <h3>Gallery</h3>
+        <p class="muted">(Add images or posts here later)</p>
+      </header>
+      <div class="gallery-grid">
+        <div class="gallery-item">Image 1 placeholder</div>
+        <div class="gallery-item">Image 2 placeholder</div>
+      </div>
+    </section>
+
+    <!-- Footer of the main content area -->
+    <footer class="site-footer">
+      <p>Made with care • Contact: <a href="mailto:jiyakhurana2102@gmail.com">jiyakhurana2102@gmail.com</a></p>
+    </footer>
+  </main>
+
+  <!--
+    Pass an array of carousel image URLs (from Flask static) into a small inline script so external JS can use them.
+    We reference the exact filenames present in the static/images/NEW Bitmoji Portfolio folder.
+  -->
+  <script>
+    var CAROUSEL_IMAGES = [
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/bundle up.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/dice.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/doing a breakdance move called the freeze with boombox in background.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/frappuccino.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/game nite.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/frequent flyer.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/game nite.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Happy books.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/Happy with cat.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/reading a book.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/winter holiday tinsel and lights.png') }}",
+      "{{ url_for('static', filename='images/NEW Bitmoji Portfolio/yap yap yap.png') }}"
+    ];
+  </script>
+
+  <!-- Load the main JavaScript for behavior (carousel, mobile menu, smooth scroll) -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

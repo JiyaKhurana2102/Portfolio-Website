@@ -1,0 +1,394 @@
+/*
+  Main stylesheet for the portfolio site.
+  - Uses CSS variables for color palette and spacing.
+  - Styles the fixed left sidebar and the main content area.
+  - Includes styles for the about section, headshot, description card, and carousel.
+  - Includes responsive rules to make the layout work on mobile.
+*/
+
+:root {
+  /* Color tokens */
+  --bg: #fbfbfb; /* light background */
+  --text: #101010; /* main text color */
+  --muted: #6b6b6b; /* secondary text color */
+  --accent: #fcf3ff; /* requested accent color */
+  --accent-strong: #f6e9f7;
+
+  /* Layout sizes */
+  --sidebar-width: 260px;
+  --max-content-width: 1100px;
+
+  /* Spacing */
+  --gap: 1.25rem;
+  --radius: 12px;
+
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+/* Reset some default spacing for a consistent baseline */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+/* VISUALLY HIDDEN CLASS useful for accessibility headings */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* Sidebar: fixed on the left with its own scroll if content overflows */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-width);
+  padding: 1rem;
+  background: #ffffff;
+  border-right: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 30;
+}
+
+/* Brand row at top of sidebar */
+.sidebar-brand {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+}
+.sidebar-brand h1 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+.sidebar-toggle {
+  background: none; border: none; font-size: 1.2rem; cursor: pointer; display: none; /* hidden on desktop */
+}
+
+/* Navigation links inside sidebar */
+.sidebar-nav ul { list-style: none; margin: 0; padding: 0; }
+.sidebar-nav li { margin: 0.25rem 0; }
+.sidebar-nav .nav-link {
+  display: block; padding: 0.55rem 0.6rem; border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 500;
+}
+.sidebar-nav .nav-link:hover,
+.sidebar-nav .nav-link:focus {
+  background: var(--accent-strong); /* subtle hover */
+  outline: 2px solid transparent;
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.sidebar-contacts { margin-top: 1rem; }
+.sidebar-contacts h3 { margin: 0 0 0.5rem 0; font-size: 0.9rem; }
+.sidebar-contacts ul { list-style: none; padding: 0; margin: 0; }
+.sidebar-contacts a { color: var(--text); text-decoration: none; display: inline-block; padding: 0.35rem 0; }
+.sidebar-contacts a:hover { color: #7a3fa5; }
+
+.sidebar-footer { margin-top: auto; font-size: 0.85rem; color: var(--muted); }
+
+/* MAIN CONTENT: leave room for the sidebar using margin-left */
+.content {
+  margin-left: var(--sidebar-width);
+  padding: 2rem clamp(1rem, 4vw, 3rem);
+  max-width: var(--max-content-width);
+}
+
+.content-header { margin-bottom: 1rem; }
+
+/* Generic section styling */
+.section { margin-bottom: 2rem; background: transparent; }
+.section header h3 { margin: 0 0 0.25rem 0; }
+.muted { color: var(--muted); font-size: 0.95rem; }
+
+/* ABOUT SECTION LAYOUT */
+.about-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr; /* headshot column + content column */
+  gap: 1.25rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+/* Headshot card styling: rounded rectangle image with outline stroke */
+.headshot-card {
+  max-width: 220px; /* keeps the headshot column limited */
+  width: 100%;
+  aspect-ratio: 1 / 1; /* make the container a square so it can become a circle */
+  padding: 6px; /* decorative padding that shows the gradient frame */
+  overflow: hidden; /* crop any part of the image that exceeds the frame */
+  border-radius: 50%; /* make the frame circular */
+  background: linear-gradient(180deg, rgba(252,243,255,0.6), rgba(252,243,255,0.8));
+  box-shadow: 0 6px 18px rgba(10,10,10,0.06), 0 0 0 3px var(--accent); /* accent ring */
+  display: flex; align-items: center; justify-content: center;
+  /* Move the avatar left so it visually centers between the sidebar and the description */
+  transform: translateX(-40px); /* larger left offset for a balanced position */
+  position: relative; /* allow precise visual shifting */
+}
+.headshot-card img {
+  width: 100%;
+  height: 100%; /* fill the circular frame */
+  object-fit: cover; /* scale and crop to fill the area */
+  object-position: bottom center; /* keep the bottom of the image visible */
+  display: block;
+  border-radius: 50%; /* ensure the image itself is circular */
+  /* remove outline from the img to rely on the container ring */
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  /* On smaller screens the layout stacks; remove the horizontal shift so the avatar centers */
+  .headshot-card { max-width: 160px; transform: none; margin: 0 auto; }
+}
+
+@media (max-width: 420px) {
+  .headshot-card { max-width: 140px; }
+}
+
+/* About content and description box */
+.about-content h3 { margin-top: 0; font-size: 1.35rem; }
+.about-description {
+  margin-top: 0.6rem; background: var(--accent); padding: 1rem; border-radius: var(--radius); color: var(--text);
+  box-shadow: 0 4px 10px rgba(12,12,12,0.04);
+}
+.about-description p { margin: 0 0 0.6rem 0; }
+
+/* CAROUSEL STYLES */
+.carousel-wrap { margin-top: 1rem; overflow: hidden; border-radius: 10px; }
+.carousel { position: relative; width: 100%; }
+.carousel-track {
+  display: flex; gap: 0.75rem; align-items: center; /* horizontally laid out images */
+  will-change: transform; /* hint for smooth animation */
+}
+.carousel-item {
+  flex: 0 0 auto; /* don't shrink */
+  width: 140px; height: 140px; border-radius: 12px; overflow: hidden; background: #fff; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06); border: 1px solid #eee;
+}
+.carousel-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Placeholder grid for Projects/Certs etc. */
+.placeholder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.project-card, .cert, .nexus-card, .exp-item { padding: 1rem; border-radius: 12px; background: #fff; border: 1px solid #eee; box-shadow: 0 6px 16px rgba(12,12,12,0.04); }
+
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.gallery-item { height: 160px; border-radius: 10px; background: linear-gradient(180deg,#fff,#fafafa); border: 1px dashed #eee; display:flex; align-items:center; justify-content:center; color:var(--muted); }
+
+/* Footer styling */
+.site-footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee; color: var(--muted); }
+
+/* TECH SECTION STYLES */
+.tech-section { margin-top: 1rem; }
+/* Heading style for the tech section. Ensure this rule is complete (font-size value + closing brace). */
+.tech-section h4 { margin: 0.35rem 0 0.25rem 0; font-size: 1.05rem; }
+.tech-section .muted { margin-bottom: 0.6rem; }
+
+.tech-grid {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+}
+
+/* Pill-style buttons that visually respond to hover and focus */
+.tech-btn {
+  background: #fff; border: 1px solid #eee; padding: 0.45rem 0.8rem; border-radius: 999px; cursor: pointer; font-weight: 500;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+.tech-btn:hover, .tech-btn:focus {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(121, 52, 161, 0.12);
+  border-color: rgba(121, 52, 161, 0.14);
+  background: var(--accent-strong);
+  outline: none;
+}
+
+.tech-btn:active { transform: translateY(-1px); }
+
+@media (max-width: 640px) {
+  .tech-grid { justify-content: center; }
+}
+
+/* PROJECT CARDS */
+.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+.project-card {
+  background: var(--accent); /* use same lavender accent as about-description */
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.project-card:hover, .project-card:focus-within { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(10,10,10,0.08); }
+.project-card-inner { display: flex; gap: 1rem; padding: 1rem; align-items: center; }
+.project-thumb { flex: 0 0 120px; width: 120px; height: 120px; border-radius: 10px; overflow: hidden; }
+.project-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.project-meta { flex: 1 1 auto; }
+.project-title { margin: 0 0 0.25rem 0; font-size: 1.05rem; }
+.project-dates { color: var(--muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
+.project-desc { margin: 0 0 0.6rem 0; }
+.project-thumbs { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; }
+.project-thumbs img { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; }
+.project-links .btn { display: inline-block; padding: 0.45rem 0.75rem; background: #fff; color: var(--text); border-radius: 8px; text-decoration: none; border: 1px solid #eee; }
+
+/* Make sure project cards shrink gracefully on small screens */
+@media (max-width: 720px) {
+  .project-card-inner { flex-direction: column; align-items: stretch; }
+  .project-thumb { width: 100%; height: 180px; flex: none; }
+  .project-thumbs img { width: 64px; height: 64px; }
+}
+
+/* CERTIFICATE CARDS */
+.cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.cert-card {
+  background: var(--accent); border-radius: 14px; padding: 1rem; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 8px 18px rgba(10,10,10,0.04);
+}
+.cert-inner h4 { margin: 0 0 0.4rem 0; }
+.cert-org { color: var(--muted); font-weight: 600; margin-bottom: 0.25rem; }
+.cert-dates { color: var(--muted); font-size: 0.95rem; margin-bottom: 0.25rem; }
+.cert-id { font-family: monospace; font-size: 0.9rem; color: #333; }
+
+/* Make certifications interactive on hover/focus */
+.cert-card {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.cert-card:hover, .cert-card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(10,10,10,0.12);
+  cursor: pointer;
+}
+.cert-card:focus-within {
+  outline: 3px solid rgba(121,52,161,0.08);
+}
+
+/* Experience item styles (single entry with small logo) */
+.exp-item {
+  display: flex; gap: 0.75rem; align-items: flex-start; padding: 1rem; border-radius: 12px; background: #fff; border: 1px solid #eee; box-shadow: 0 6px 16px rgba(12,12,12,0.04);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.exp-item:hover, .exp-item:focus {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 36px rgba(10,10,10,0.08);
+  outline: none;
+}
+.exp-logo {
+  width: 48px; height: 48px; border-radius: 8px; background: linear-gradient(180deg,#fff,#fafafa); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex: 0 0 48px;
+}
+.exp-meta h4 { margin: 0 0 0.25rem 0; font-size: 1rem; }
+.exp-org { color: var(--muted); font-weight: 600; margin-bottom: 0.5rem; }
+
+@media (max-width: 720px) {
+  .exp-item { flex-direction: row; }
+  .exp-logo { width: 44px; height: 44px; }
+}
+
+/* RESPONSIVE RULES for smaller screens */
+@media (max-width: 900px) {
+  :root { --sidebar-width: 72px; }
+  .sidebar { width: var(--sidebar-width); padding: 0.6rem; }
+  .sidebar-brand h1 { font-size: 1rem; }
+  .sidebar-toggle { display: inline-block; }
+  .sidebar-nav .nav-link { font-size: 0.9rem; padding: 0.45rem; }
+  .content { margin-left: var(--sidebar-width); padding: 1rem; }
+  .about-grid { grid-template-columns: 1fr; }
+  .headshot-card { max-width: 160px; }
+  .about-content { text-align: center; }
+  .carousel-item { width: 120px; height: 120px; }
+}
+
+/* MOBILE: convert sidebar into a top horizontal bar with a slide-out panel */
+@media (max-width: 640px) {
+  .sidebar { position: fixed; left: 0; top: 0; right: 0; height: 64px; width: 100%; display: flex; align-items: center; padding: 0.5rem 0.75rem; border-right: none; border-bottom: 1px solid #eee; }
+  .content { margin-left: 0; padding-top: 78px; }
+  .sidebar-nav { display: none; }
+  .sidebar .sidebar-toggle { display: block; }
+  .sidebar.open .sidebar-nav { display: block; position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; background: #fff; padding: 1rem; box-shadow: 0 8px 40px rgba(10,10,10,0.08); }
+}
+
+/* Additional responsive and overflow fixes
+  - Ensures the headshot and the about-text box don't cause horizontal overflow
+  - Makes carousel items scale on small screens so images don't push the page wider
+  - Adds safe wrapping rules for long words and filenames
+*/
+
+/* Prevent accidental horizontal scrolling on narrow devices */
+html, body {
+  overflow-x: hidden; /* prevents content from sliding off-screen horizontally */
+}
+
+/* Allow grid children to shrink properly (important for long text/content in flex/grid layouts) */
+.content, .about-grid, .about-content {
+  min-width: 0; /* allows children to shrink inside constrained containers */
+}
+
+/* Make the about-grid use shrinkable columns so the right column won't overflow */
+.about-grid {
+  /* first column is up to 220px but can shrink; second column is flexible but allowed to shrink to avoid overflow */
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+}
+
+/* Headshot sizing improvements: ensure the image never forces overflow */
+.headshot-card {
+  max-width: 220px; /* keeps the headshot column limited */
+  width: 100%;
+  aspect-ratio: 1 / 1; /* make the container a square so it can become a circle */
+  padding: 6px; /* decorative padding that shows the gradient frame */
+  overflow: hidden; /* crop any part of the image that exceeds the frame */
+  border-radius: 50%; /* make the frame circular */
+  background: linear-gradient(180deg, rgba(252,243,255,0.6), rgba(252,243,255,0.8));
+  box-shadow: 0 6px 18px rgba(10,10,10,0.06), 0 0 0 3px var(--accent); /* accent ring */
+  display: flex; align-items: center; justify-content: center;
+}
+.headshot-card img {
+  width: 100%;
+  height: 100%; /* fill the circular frame */
+  object-fit: cover; /* scale and crop to fill the area */
+  object-position: bottom center; /* keep the bottom of the image visible */
+  display: block;
+  border-radius: 50%; /* ensure the image itself is circular */
+  /* remove outline from the img to rely on the container ring */
+  outline: none;
+}
+
+@media (max-width: 900px) {
+  .headshot-card { max-width: 160px; }
+}
+
+@media (max-width: 420px) {
+  .headshot-card { max-width: 140px; }
+}
+
+/* Text wrapping and box sizing for the about description */
+.about-description {
+  max-width: 100%; /* don't let this box grow beyond its container */
+  overflow-wrap: break-word; /* break long urls or tokens */
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* Make carousel items scale responsively so they don't push layout wider on small screens */
+.carousel-item {
+  /* Use clamp to provide a flexible size: min 90px, preferred ~18vw, max 160px */
+  width: clamp(90px, 18vw, 160px);
+  height: clamp(90px, 18vw, 160px);
+}
+
+/* Ensure carousel container hides overflow (already present but reinforce) */
+.carousel-wrap {
+  overflow: hidden;
+}
+
+/* On very small screens, stack the about content and limit paddings so nothing goes off-screen */
+@media (max-width: 420px) {
+  .content { padding-left: 0.8rem; padding-right: 0.8rem; }
+  .about-description { font-size: 0.95rem; }
+  .headshot-card { max-width: 160px; margin: 0 auto; }
+  .carousel-item { width: clamp(80px, 22vw, 140px); height: clamp(80px, 22vw, 140px); }
+}
+
+/* On medium screens ensure the content calculates available width properly */
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .headshot-card { width: 140px; margin: 0 auto; }
+  .about-content { text-align: center; }
+}
+
+/* End of appended responsive fixes */
+
+/* Small utility classes */
+.text-center { text-align: center; }
+
+/* End of stylesheet */
