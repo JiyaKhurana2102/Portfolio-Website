@@ -37,6 +37,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const { sidebar, offset } = getSidebarAndOffset();
 
+    // Diagnostic logging for debugging mobile scroll behavior
+    try {
+      console.log('[nav] click', {
+        href,
+        isTopBar: window.matchMedia('(max-width: 640px)').matches,
+        offset,
+        sidebarOpen: !!(sidebar && sidebar.classList.contains('open')),
+        targetTop: target.getBoundingClientRect().top,
+        scrollY: window.scrollY
+      });
+    } catch (err) {
+      // ignore logging errors in older browsers
+    }
+
     // Use scrollIntoView for the main smooth scroll and then adjust by offset.
     // This avoids layout measurement timing issues in some browsers.
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
