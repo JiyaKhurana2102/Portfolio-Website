@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory, abort
 import os
 from datetime import datetime
 
@@ -111,6 +111,24 @@ def experience():
     """
     ctx = get_common_context()
     return render_template('experience.html', **ctx)
+
+# Serve a stable URL for the resume PDF. This helps avoid issues with spaces in
+# filenames and gives us a single place to update the resume filename in the
+# future. It also allows us to return a friendly 404 if the file is missing.
+@app.route('/resume')
+def resume_file():
+    """Return the resume PDF from static/Resume.
+
+    The file on disk is expected at: static/Resume/CS Resume- Jiya.pdf
+    If you later rename the file, update the `filename` variable here.
+    """
+    resume_dir = os.path.join(app.root_path, 'static', 'Resume')
+    filename = 'CS Resume- Jiya.pdf'
+    try:
+        return send_from_directory(resume_dir, filename, as_attachment=False)
+    except Exception as e:
+        app.logger.exception('Resume file not found or could not be served: %s', e)
+        abort(404)
 
 # Health-check endpoint useful for platform load balancers and Render
 @app.route('/health')
