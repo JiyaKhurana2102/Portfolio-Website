@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 # SECRET_KEY is required for session features like flash().
 # For production, set this via an environment variable and keep it secret.
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'replace-this-with-a-secure-random-value')
+app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 
 # ============================================================================
 # Sample content data (projects, certifications, experience, nexus, gallery)
