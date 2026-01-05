@@ -9,47 +9,74 @@
 
 // Wait for DOM content to ensure elements exist before manipulating them
 document.addEventListener('DOMContentLoaded', function () {
-  // ---------- Smooth scrolling for sidebar links ----------
-  // Grab all internal nav links that point to sections on this page
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(link => {
-    link.addEventListener('click', function (e) {
-      e.preventDefault();
-      const href = this.getAttribute('href');
-      const target = document.querySelector(href);
-      if (!target) return;
+  // helper to compute sidebar and offset for scrolling
+  function getSidebarAndOffset() {
+    const sidebar = document.getElementById('sidebar');
+    let offset = 12;
+    if (sidebar) {
+      // Use media query to decide if sidebar is acting as a top bar (mobile)
+      const isTopBar = window.matchMedia('(max-width: 640px)').matches;
+      if (isTopBar) offset = sidebar.getBoundingClientRect().height + 8;
+    }
+    return { sidebar, offset };
+  }
 
-      // Compute an offset to account for any fixed header/sidebar that may overlap the section title.
-      // On small screens the sidebar becomes a top bar (height ~64px); on desktop it is vertical so no top offset needed.
-      const sidebar = document.getElementById('sidebar');
-      let offset = 12; // default small spacing from top
-      if (sidebar) {
-        // If the sidebar currently spans the top of the page (mobile), subtract its height
-        const sidebarStyle = window.getComputedStyle(sidebar);
-        const isTopBar = sidebarStyle.position === 'fixed' && sidebar.getBoundingClientRect().width >= window.innerWidth - 1;
-        if (isTopBar) {
-          offset = sidebar.getBoundingClientRect().height + 8; // a little extra breathing room
-        }
+  // unified handler for nav link clicks
+  function onNavLinkClick(e) {
+    if (!e.currentTarget) return;
+    e.preventDefault();
+
+    const href = this.getAttribute('href');
+    if (!href || href.charAt(0) !== '#') return; // only handle in-page anchors
+
+    const target = document.querySelector(href);
+    if (!target) {
+      console.warn('Nav target not found for', href);
+      return;
+    }
+
+    const { sidebar, offset } = getSidebarAndOffset();
+
+    // Use scrollIntoView for the main smooth scroll and then adjust by offset.
+    // This avoids layout measurement timing issues in some browsers.
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // After the browser has performed the initial smooth scroll, nudge the page up by the offset
+    // Use a small timeout to allow the initial scroll to start — 300ms is usually sufficient.
+    // Use a non-zero timeout so the adjustment is animated (keeps UX smooth).
+    setTimeout(() => {
+      // Use window.scrollBy with smooth behavior where supported
+      try {
+        window.scrollBy({ top: -offset, left: 0, behavior: 'smooth' });
+      } catch (err) {
+        // Fallback for browsers that don't support smooth in scrollBy
+        window.scrollTo({ top: window.scrollY - offset });
       }
 
-      // Calculate the exact document position to scroll to, taking into account current scrollY
-      const targetRect = target.getBoundingClientRect();
-      const scrollTarget = window.scrollY + targetRect.top - offset;
+      // Update URL hash without jumping
+      if (history.replaceState) history.replaceState(null, '', href);
+    }, 320);
 
-      // Scroll smoothly to that computed position
-      window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+    // Close mobile sidebar if open
+    if (sidebar && sidebar.classList.contains('open')) sidebar.classList.remove('open');
+  }
 
-      // On small screens, close the sidebar if it was open
-      if (sidebar && sidebar.classList.contains('open')) sidebar.classList.remove('open');
-    });
-  });
+  // Attach to all nav links (covers sidebar and any other nav areas)
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => link.addEventListener('click', onNavLinkClick));
 
   // ---------- Mobile sidebar toggle ----------
   const sidebarToggle = document.getElementById('sidebarToggle');
   if (sidebarToggle) {
-    sidebarToggle.addEventListener('click', function () {
+    sidebarToggle.addEventListener('click', function (ev) {
       const sidebar = document.getElementById('sidebar');
+      if (!sidebar) return;
       sidebar.classList.toggle('open');
+      // ensure focus moves to first link for keyboard users
+      if (sidebar.classList.contains('open')) {
+        const firstLink = sidebar.querySelector('.nav-link');
+        if (firstLink) firstLink.focus();
+      }
     });
   }
 

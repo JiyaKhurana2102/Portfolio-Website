@@ -245,6 +245,27 @@ body {
   .sidebar.open .sidebar-nav { display: block; position: absolute; left: 0; top: 64px; bottom: 0; width: 260px; background: var(--card); padding: 1rem; box-shadow: 0 8px 40px var(--shadow-dark); }
 }
 
+/* Ensure the sidebar nav is interactive and above content when open */
+.sidebar-nav {
+  position: relative;
+  z-index: 40;
+  -webkit-overflow-scrolling: touch; /* smooth touch scrolling on iOS */
+}
+
+.sidebar-nav .nav-link {
+  pointer-events: auto; /* explicit so links remain clickable */
+  touch-action: manipulation; /* improve touch responsiveness */
+}
+
+/* When the mobile sidebar is open, make sure it sits on top of the page content */
+.sidebar.open .sidebar-nav {
+  z-index: 90;
+  box-shadow: 0 8px 40px var(--shadow-dark);
+}
+
+/* Ensure the toggle button sits above other elements */
+.sidebar-toggle { z-index: 95; }
+
 /* Additional responsive and overflow fixes
   - Ensures the headshot and the about-text box don't cause horizontal overflow
   - Makes carousel items scale on small screens so images don't push the page wider
